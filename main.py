@@ -264,7 +264,7 @@ class LoginHandler(BlogHandler):
         """ Render the login form with or without an error, based on parameters """
         t = jinja_env.get_template("login.html")
         response = t.render(error=error)
-        self.response.out.write(response)
+        self.render('login.html',response)
 
     def get(self):
         self.render_login_form()
@@ -277,12 +277,12 @@ class LoginHandler(BlogHandler):
         user = self.get_user_by_name(submitted_username)
 
         if not user:
-            self.render_login_form(error="Invalid username")
+            self.render_login_form(username_error="Invalid username")
         elif hashutils.valid_pw(submitted_username, submitted_password, user.pw_hash):
             self.login_user(user)
             self.redirect('/blog/newpost')
         else:
-            self.render_login_form(error="Invalid password")
+            self.render_login_form(password_error="Invalid password")
 
 class LogoutHandler(BlogHandler):
 
